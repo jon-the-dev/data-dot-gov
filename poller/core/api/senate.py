@@ -29,6 +29,56 @@ class SenateGovAPI(BaseAPI):
 
     BASE_URL = "https://lda.senate.gov/api"
 
+    # Map API filing types to storage directories
+    # LD-1 types (registrations)
+    LD1_TYPES = {"RR", "RA"}  # Registration, Registration Amendment
+    # LD-2 types (quarterly/periodic activity reports)
+    LD2_TYPES = {
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4",
+        "Q1Y",
+        "Q2Y",
+        "Q3Y",
+        "Q4Y",
+        "1A",
+        "2A",
+        "3A",
+        "4A",
+        "1T",
+        "2T",
+        "3T",
+        "4T",
+        "MM",
+        "MMY",
+        "MA",
+        "MT",
+        "YY",
+        "YYY",
+        "YA",
+        "YT",
+    }
+
+    @classmethod
+    def get_filing_category(cls, filing_type: str) -> str:
+        """
+        Get the storage category for a filing type.
+
+        Args:
+            filing_type: The API filing type code (RR, Q1, etc.)
+
+        Returns:
+            'ld-1' for registrations, 'ld-2' for activity reports
+        """
+        if filing_type.upper() in cls.LD1_TYPES:
+            return "ld-1"
+        elif filing_type.upper() in cls.LD2_TYPES:
+            return "ld-2"
+        else:
+            # Default to the filing type as-is for unknown types
+            return filing_type.lower()
+
     def __init__(self, username: Optional[str] = None, password: Optional[str] = None):
         """
         Initialize Senate.gov API client
@@ -114,38 +164,46 @@ class SenateGovAPI(BaseAPI):
 
     def get_filings(
         self,
-        filing_type: str = "LD-1",
+        filing_type: str = "RR",
         start_date: Optional[str] = None,
         end_date: Optional[str] = None,
         limit: int = 25,
-        max_results: int = 25,
+        max_results: int = 100,
         output_dir: str = "data",
         incremental: bool = True,
         individual_files: bool = False,
+        ordering: str = "-dt_posted",
     ) -> List[Dict]:
         """
         Get lobbying disclosure filings
 
         Args:
-            filing_type: Type of filing (YY for Year-End Reports, MM for Mid-Year Reports, YT for Year-End Termination)
+            filing_type: Type of filing. Valid values:
+                - 'RR': Registration (LD-1)
+                - 'RA': Registration - Amendment
+                - 'Q1', 'Q2', 'Q3', 'Q4': Quarterly Reports (LD-2)
+                - 'MM': Mid-Year Report
+                - 'YY': Year-End Report
+                - Plus various amendments and terminations
             start_date: Start date (YYYY-MM-DD format)
             end_date: End date (YYYY-MM-DD format)
             limit: Maximum number of results per page (default 25)
-            max_results: Maximum total results to fetch (default 25)
+            max_results: Maximum total results to fetch (default 100)
             output_dir: Directory for incremental saves
             incremental: Whether to save incrementally
             individual_files: Whether to save each record as individual file
+            ordering: Sort order ('-dt_posted' for newest first, 'dt_posted' for oldest)
 
         Returns:
             List of filing records
         """
         endpoint = "/v1/filings/"
-        params = {"filing_type": filing_type, "limit": limit}
+        params = {"filing_type": filing_type, "limit": limit, "ordering": ordering}
 
         if start_date:
-            params["filed_date__gte"] = start_date
+            params["dt_posted__gte"] = start_date
         if end_date:
-            params["filed_date__lte"] = end_date
+            params["dt_posted__lte"] = end_date
 
         filename = f"senate_{filing_type.lower().replace('-', '')}_filings.json"
         all_filings = []
@@ -192,13 +250,16 @@ class SenateGovAPI(BaseAPI):
 
             # Save individual files if requested
             if individual_files:
+                # Map filing type to storage category (ld-1 or ld-2)
+                category = self.get_filing_category(filing_type)
+                record_type = f"senate_filings/{category}"
+
                 for filing in results:
                     filing_id = (
                         filing.get("filing_uuid")
                         or filing.get("id")
                         or f"filing_{len(all_filings)}"
                     )
-                    record_type = f"senate_filings/{filing_type.lower()}"
                     save_individual_record(filing, record_type, filing_id, output_dir)
 
             all_filings.extend(results)
@@ -230,7 +291,8 @@ class SenateGovAPI(BaseAPI):
 
         # Save index if using individual files
         if individual_files:
-            save_index(all_filings, f"senate_filings/{filing_type.lower()}", output_dir)
+            category = self.get_filing_category(filing_type)
+            save_index(all_filings, f"senate_filings/{category}", output_dir)
 
         logger.info(f"Retrieved {len(all_filings)} {filing_type} filings")
         return all_filings[:max_results]
@@ -444,6 +506,90 @@ class SenateGovAPI(BaseAPI):
             json.dump(data, f, indent=2, default=str)
 
         logger.info(f"Saved {len(data)} records to {filepath}")
+
+    def get_filing_types(self) -> List[Dict]:
+        """
+        Get available filing type constants from the API
+
+        Returns:
+            List of filing type dictionaries with 'value' and 'name' keys
+        """
+        endpoint = "/v1/constants/filing/filingtypes/"
+        data = self._make_request(endpoint)
+        return data if data else []
+
+    def get_registrations(
+        self,
+        start_date: Optional[str] = None,
+        end_date: Optional[str] = None,
+        max_results: int = 500,
+        output_dir: str = "data",
+        individual_files: bool = True,
+    ) -> List[Dict]:
+        """
+        Get LD-1 Registration filings (new lobbyist registrations)
+
+        Args:
+            start_date: Start date (YYYY-MM-DD format)
+            end_date: End date (YYYY-MM-DD format)
+            max_results: Maximum total results to fetch
+            output_dir: Directory for saves
+            individual_files: Whether to save each record as individual file
+
+        Returns:
+            List of registration filing records
+        """
+        return self.get_filings(
+            filing_type="RR",
+            start_date=start_date,
+            end_date=end_date,
+            max_results=max_results,
+            output_dir=output_dir,
+            individual_files=individual_files,
+            ordering="-dt_posted",
+        )
+
+    def get_quarterly_reports(
+        self,
+        start_date: Optional[str] = None,
+        end_date: Optional[str] = None,
+        max_results: int = 500,
+        output_dir: str = "data",
+        individual_files: bool = True,
+        quarters: Optional[List[str]] = None,
+    ) -> List[Dict]:
+        """
+        Get LD-2 Quarterly Activity Reports
+
+        Args:
+            start_date: Start date (YYYY-MM-DD format)
+            end_date: End date (YYYY-MM-DD format)
+            max_results: Maximum total results per quarter
+            output_dir: Directory for saves
+            individual_files: Whether to save each record as individual file
+            quarters: List of quarters to fetch (default: all Q1-Q4)
+
+        Returns:
+            List of quarterly activity report records
+        """
+        if quarters is None:
+            quarters = ["Q1", "Q2", "Q3", "Q4"]
+
+        all_reports = []
+        for quarter in quarters:
+            reports = self.get_filings(
+                filing_type=quarter,
+                start_date=start_date,
+                end_date=end_date,
+                max_results=max_results,
+                output_dir=output_dir,
+                individual_files=individual_files,
+                ordering="-dt_posted",
+            )
+            all_reports.extend(reports)
+            logger.info(f"Fetched {len(reports)} {quarter} reports")
+
+        return all_reports
 
     def get_api_info(self) -> Dict:
         """
