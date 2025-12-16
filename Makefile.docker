@@ -1,0 +1,285 @@
+# Congressional Transparency Platform - Docker Makefile
+# Docker-specific commands for development and production deployment
+
+.DEFAULT_GOAL := help
+.PHONY: help
+
+# Colors for output
+BLUE := \033[36m
+GREEN := \033[32m
+YELLOW := \033[33m
+RED := \033[31m
+NC := \033[0m
+
+# Configuration
+COMPOSE_FILE_DEV := docker-compose.yml
+COMPOSE_FILE_PROD := docker-compose.prod.yml
+ENV_FILE_DEV := .env
+ENV_FILE_PROD := .env.production
+ENV_FILE_STAGING := .env.staging
+
+help: ## Show this help message
+	@echo "$(BLUE)Congressional Transparency Platform - Docker Commands$(NC)"
+	@echo
+	@echo "$(GREEN)Development:$(NC)"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | grep -E '(dev|development)' | awk 'BEGIN {FS = ":.*?## "}; {printf "  $(YELLOW)%-20s$(NC) %s\n", $$1, $$2}'
+	@echo
+	@echo "$(GREEN)Production:$(NC)"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | grep -E '(prod|production)' | awk 'BEGIN {FS = ":.*?## "}; {printf "  $(YELLOW)%-20s$(NC) %s\n", $$1, $$2}'
+	@echo
+	@echo "$(GREEN)Staging:$(NC)"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | grep -E '(staging|stage)' | awk 'BEGIN {FS = ":.*?## "}; {printf "  $(YELLOW)%-20s$(NC) %s\n", $$1, $$2}'
+	@echo
+	@echo "$(GREEN)Utilities:$(NC)"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | grep -vE '(dev|development|prod|production|staging|stage)' | awk 'BEGIN {FS = ":.*?## "}; {printf "  $(YELLOW)%-20s$(NC) %s\n", $$1, $$2}'
+
+# Development Commands
+dev-up: ## Start development environment
+	@echo "$(BLUE)Starting development environment...$(NC)"
+	@docker-compose -f $(COMPOSE_FILE_DEV) --profile development up -d
+	@echo "$(GREEN)Development environment started$(NC)"
+	@echo "Frontend: http://localhost:5173"
+	@echo "Backend: http://localhost:8000"
+	@echo "Database: localhost:5432"
+	@echo "pgAdmin: http://localhost:8080"
+
+dev-down: ## Stop development environment
+	@echo "$(BLUE)Stopping development environment...$(NC)"
+	@docker-compose -f $(COMPOSE_FILE_DEV) down
+	@echo "$(GREEN)Development environment stopped$(NC)"
+
+dev-build: ## Build development images
+	@echo "$(BLUE)Building development images...$(NC)"
+	@docker-compose -f $(COMPOSE_FILE_DEV) build frontend-dev backend-dev
+	@echo "$(GREEN)Development images built$(NC)"
+
+dev-logs: ## Show development logs
+	@docker-compose -f $(COMPOSE_FILE_DEV) logs -f
+
+dev-shell-backend: ## Open shell in development backend
+	@docker-compose -f $(COMPOSE_FILE_DEV) exec backend-dev bash
+
+dev-shell-frontend: ## Open shell in development frontend
+	@docker-compose -f $(COMPOSE_FILE_DEV) exec frontend-dev sh
+
+dev-shell-db: ## Open database shell in development
+	@docker-compose -f $(COMPOSE_FILE_DEV) exec postgres psql -U congress_app -d congress_transparency
+
+dev-reset: ## Reset development environment (removes volumes)
+	@echo "$(YELLOW)Resetting development environment...$(NC)"
+	@docker-compose -f $(COMPOSE_FILE_DEV) down -v
+	@docker volume prune -f
+	@echo "$(GREEN)Development environment reset$(NC)"
+
+# Production Commands
+prod-deploy: ## Deploy to production
+	@echo "$(BLUE)Deploying to production...$(NC)"
+	@./scripts/deploy-production.sh deploy
+
+prod-build: ## Build production images
+	@echo "$(BLUE)Building production images...$(NC)"
+	@docker build -f Dockerfile.frontend --target production -t congress-frontend:latest .
+	@docker build -f Dockerfile.backend --target production -t congress-backend:latest .
+	@echo "$(GREEN)Production images built$(NC)"
+
+prod-up: ## Start production services
+	@echo "$(BLUE)Starting production services...$(NC)"
+	@docker-compose -f $(COMPOSE_FILE_PROD) --env-file $(ENV_FILE_PROD) up -d
+	@echo "$(GREEN)Production services started$(NC)"
+
+prod-down: ## Stop production services
+	@echo "$(BLUE)Stopping production services...$(NC)"
+	@docker-compose -f $(COMPOSE_FILE_PROD) --env-file $(ENV_FILE_PROD) down
+	@echo "$(GREEN)Production services stopped$(NC)"
+
+prod-logs: ## Show production logs
+	@docker-compose -f $(COMPOSE_FILE_PROD) --env-file $(ENV_FILE_PROD) logs -f
+
+prod-status: ## Show production status
+	@./scripts/deploy-production.sh status
+
+prod-health: ## Run production health checks
+	@./scripts/deploy-production.sh health
+
+prod-rollback: ## Rollback production deployment
+	@./scripts/deploy-production.sh rollback
+
+# Staging Commands
+staging-test: ## Run staging tests
+	@echo "$(BLUE)Running staging tests...$(NC)"
+	@./scripts/deploy-staging.sh test
+
+staging-up: ## Start staging environment
+	@echo "$(BLUE)Starting staging environment...$(NC)"
+	@./scripts/deploy-staging.sh start
+
+staging-down: ## Stop staging environment
+	@echo "$(BLUE)Stopping staging environment...$(NC)"
+	@./scripts/deploy-staging.sh stop
+
+staging-cleanup: ## Clean staging environment
+	@./scripts/deploy-staging.sh cleanup
+
+# Database Commands
+db-backup: ## Create database backup
+	@echo "$(BLUE)Creating database backup...$(NC)"
+	@./scripts/backup-prod.sh backup
+
+db-restore: ## Restore database (interactive)
+	@echo "$(BLUE)Available backups:$(NC)"
+	@./scripts/restore-prod.sh list
+	@echo
+	@read -p "Enter backup timestamp to restore: " timestamp; \
+	./scripts/restore-prod.sh restore $$timestamp
+
+db-restore-latest: ## Restore latest database backup
+	@./scripts/restore-prod.sh restore-latest
+
+db-shell: ## Open database shell
+	@docker-compose -f $(COMPOSE_FILE_PROD) --env-file $(ENV_FILE_PROD) exec postgres psql -U congress_app -d congress_transparency
+
+# Image Management
+images-build-all: ## Build all Docker images
+	@echo "$(BLUE)Building all Docker images...$(NC)"
+	@docker build -f Dockerfile.frontend --target production -t congress-frontend:latest .
+	@docker build -f Dockerfile.backend --target production -t congress-backend:latest .
+	@docker build -f Dockerfile.frontend --target development -t congress-frontend:dev .
+	@docker build -f Dockerfile.backend --target development -t congress-backend:dev .
+	@echo "$(GREEN)All images built$(NC)"
+
+images-pull: ## Pull external Docker images
+	@echo "$(BLUE)Pulling external Docker images...$(NC)"
+	@docker-compose -f $(COMPOSE_FILE_PROD) pull postgres redis prometheus grafana
+	@echo "$(GREEN)External images pulled$(NC)"
+
+images-clean: ## Clean unused Docker images
+	@echo "$(BLUE)Cleaning unused Docker images...$(NC)"
+	@docker image prune -f
+	@docker system prune -f
+	@echo "$(GREEN)Unused images cleaned$(NC)"
+
+# Network Management
+network-create: ## Create required Docker networks
+	@echo "$(BLUE)Creating Docker networks...$(NC)"
+	@docker network create backend 2>/dev/null || true
+	@docker network create congress_network 2>/dev/null || true
+	@echo "$(GREEN)Networks created$(NC)"
+
+network-clean: ## Remove unused Docker networks
+	@echo "$(BLUE)Cleaning unused Docker networks...$(NC)"
+	@docker network prune -f
+	@echo "$(GREEN)Unused networks cleaned$(NC)"
+
+# Volume Management
+volumes-create: ## Create required Docker volumes
+	@echo "$(BLUE)Creating Docker volumes...$(NC)"
+	@mkdir -p docker-volumes/{postgres-dev,redis-dev,pgadmin-dev}
+	@mkdir -p /opt/congress-platform/{data/{postgres,redis,prometheus,grafana},backups,logs} 2>/dev/null || true
+	@echo "$(GREEN)Volumes created$(NC)"
+
+volumes-backup: ## Backup Docker volumes
+	@echo "$(BLUE)Backing up Docker volumes...$(NC)"
+	@./scripts/backup-prod.sh backup
+	@echo "$(GREEN)Volumes backed up$(NC)"
+
+volumes-clean: ## Remove unused Docker volumes
+	@echo "$(BLUE)Cleaning unused Docker volumes...$(NC)"
+	@docker volume prune -f
+	@echo "$(GREEN)Unused volumes cleaned$(NC)"
+
+# Security Commands
+security-scan: ## Run security scan on images
+	@echo "$(BLUE)Running security scan...$(NC)"
+	@docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+		aquasec/trivy image congress-frontend:latest
+	@docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+		aquasec/trivy image congress-backend:latest
+
+# Monitoring Commands
+monitoring-up: ## Start monitoring stack
+	@echo "$(BLUE)Starting monitoring stack...$(NC)"
+	@docker-compose -f $(COMPOSE_FILE_PROD) --env-file $(ENV_FILE_PROD) up -d prometheus grafana
+	@echo "$(GREEN)Monitoring stack started$(NC)"
+	@echo "Grafana: https://congress-dashboard.local.team-skynet.io"
+	@echo "Prometheus: https://congress-metrics.local.team-skynet.io"
+
+monitoring-down: ## Stop monitoring stack
+	@docker-compose -f $(COMPOSE_FILE_PROD) --env-file $(ENV_FILE_PROD) stop prometheus grafana
+
+# Utility Commands
+logs: ## Show logs for specific service (usage: make logs SERVICE=backend)
+	@if [ -z "$(SERVICE)" ]; then \
+		echo "$(RED)Please specify SERVICE (e.g., make logs SERVICE=backend)$(NC)"; \
+	else \
+		docker-compose -f $(COMPOSE_FILE_PROD) --env-file $(ENV_FILE_PROD) logs -f $(SERVICE); \
+	fi
+
+shell: ## Open shell in specific service (usage: make shell SERVICE=backend)
+	@if [ -z "$(SERVICE)" ]; then \
+		echo "$(RED)Please specify SERVICE (e.g., make shell SERVICE=backend)$(NC)"; \
+	else \
+		docker-compose -f $(COMPOSE_FILE_PROD) --env-file $(ENV_FILE_PROD) exec $(SERVICE) bash; \
+	fi
+
+ps: ## Show running containers
+	@docker-compose -f $(COMPOSE_FILE_PROD) --env-file $(ENV_FILE_PROD) ps
+
+stats: ## Show container resource usage
+	@docker stats
+
+clean-all: ## Clean everything (images, volumes, networks)
+	@echo "$(YELLOW)This will remove all unused Docker resources. Continue? [y/N]$(NC)"
+	@read -n 1 -r; \
+	if [[ $$REPLY =~ ^[Yy]$$ ]]; then \
+		echo; \
+		make images-clean; \
+		make volumes-clean; \
+		make network-clean; \
+		echo "$(GREEN)All Docker resources cleaned$(NC)"; \
+	else \
+		echo; \
+		echo "$(YELLOW)Operation cancelled$(NC)"; \
+	fi
+
+# Quick Development Setup
+dev-setup: ## Quick development setup
+	@echo "$(BLUE)Setting up development environment...$(NC)"
+	@make network-create
+	@make volumes-create
+	@make dev-build
+	@make dev-up
+	@echo "$(GREEN)Development environment ready!$(NC)"
+	@echo
+	@echo "$(BLUE)Services available at:$(NC)"
+	@echo "  Frontend: http://localhost:5173"
+	@echo "  Backend: http://localhost:8000"
+	@echo "  Database: localhost:5432"
+	@echo "  pgAdmin: http://localhost:8080"
+
+# Quick Production Deploy
+prod-setup: ## Quick production deployment
+	@echo "$(BLUE)Setting up production environment...$(NC)"
+	@make network-create
+	@make volumes-create
+	@make prod-build
+	@make prod-deploy
+	@echo "$(GREEN)Production environment ready!$(NC)"
+
+# Environment Information
+info: ## Show environment information
+	@echo "$(BLUE)Congressional Transparency Platform - Environment Information$(NC)"
+	@echo
+	@echo "$(GREEN)Docker Version:$(NC)"
+	@docker --version
+	@echo
+	@echo "$(GREEN)Docker Compose Version:$(NC)"
+	@docker-compose --version
+	@echo
+	@echo "$(GREEN)Available Networks:$(NC)"
+	@docker network ls | grep -E "(backend|congress)"
+	@echo
+	@echo "$(GREEN)Available Volumes:$(NC)"
+	@docker volume ls | grep -E "(congress|postgres|redis)"
+	@echo
+	@echo "$(GREEN)Running Containers:$(NC)"
+	@docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"

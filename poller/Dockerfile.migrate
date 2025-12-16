@@ -1,0 +1,40 @@
+# Dockerfile for Database Migration Container
+FROM python:3.11-slim
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    postgresql-client \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements.txt .
+COPY Pipfile* ./
+
+# Install pipenv and dependencies
+RUN pip install pipenv
+RUN pipenv install --system --deploy
+
+# Install additional database dependencies
+RUN pip install \
+    sqlalchemy[postgresql] \
+    psycopg2-binary \
+    alembic \
+    python-dotenv
+
+# Copy application code
+COPY database_setup.py .
+COPY db/ ./db/
+
+# Create data directory
+RUN mkdir -p /app/data
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD python -c "from database_setup import DatabaseManager; DatabaseManager().test_connection()" || exit 1
+
+# Default command
+CMD ["python", "database_setup.py", "--help"]

@@ -1,0 +1,469 @@
+{
+  "bills": {
+    "118": {
+      "count": 125,
+      "types": {
+        "HR": 84,
+        "HRES": 2,
+        "S": 14
+      },
+      "recent_laws": [
+        {
+          "number": "HR-6750",
+          "title": "To designate the facility of the United States Postal Service located at 501 Mer..."
+        },
+        {
+          "number": "HR-9775",
+          "title": "To designate the facility of the United States Postal Service located at 119 Nor..."
+        },
+        {
+          "number": "HR-7507",
+          "title": "To designate the facility of the United States Postal Service located at 203 Eas..."
+        },
+        {
+          "number": "HR-3354",
+          "title": "To designate the facility of the United States Postal Service located at 220 Nor..."
+        },
+        {
+          "number": "HR-1555",
+          "title": "To designate the facility of the United States Postal Service located at 2300 Sy..."
+        },
+        {
+          "number": "HR-8666",
+          "title": "To amend title 28, United States Code, to authorize holding court for the Centra..."
+        },
+        {
+          "number": "HR-7213",
+          "title": "Autism CARES Act of 2024..."
+        },
+        {
+          "number": "HR-9124",
+          "title": "To name the Department of Veterans Affairs community-based outpatient clinic in ..."
+        },
+        {
+          "number": "HR-6843",
+          "title": "To expand the boundaries of the Atchafalaya National Heritage Area to include La..."
+        },
+        {
+          "number": "HR-7177",
+          "title": "To amend title 28, United States Code, to consolidate certain divisions in the N..."
+        },
+        {
+          "number": "HR-8057",
+          "title": "To designate the facility of the United States Postal Service located at 9317 Bo..."
+        },
+        {
+          "number": "HR-9580",
+          "title": "To designate the facility of the United States Postal Service located at 2777 Br..."
+        },
+        {
+          "number": "HR-670",
+          "title": "Think Differently Database Act..."
+        },
+        {
+          "number": "HR-8919",
+          "title": "To designate the facility of the United States Postal Service located at 151 Hig..."
+        },
+        {
+          "number": "HR-6395",
+          "title": "Recognizing the Importance of Critical Minerals in Healthcare Act of 2023..."
+        },
+        {
+          "number": "HR-6116",
+          "title": "To designate the facility of the United States Postal Service located at 14280 S..."
+        },
+        {
+          "number": "HR-9076",
+          "title": "Supporting America\u2019s Children and Families Act..."
+        },
+        {
+          "number": "HR-8667",
+          "title": "To rename the community-based outpatient clinic of the Department of Veterans Af..."
+        },
+        {
+          "number": "HR-5887",
+          "title": "Government Service Delivery Improvement Act..."
+        },
+        {
+          "number": "HR-6244",
+          "title": "To designate the facility of the United States Postal Service located at 1535 Ea..."
+        },
+        {
+          "number": "S-141",
+          "title": "Senator Elizabeth Dole 21st Century Veterans Healthcare and Benefits Improvement..."
+        },
+        {
+          "number": "S-2181",
+          "title": "Keeping Military Families Together Act of 2024..."
+        },
+        {
+          "number": "HR-9285",
+          "title": "To designate the facility of the United States Postal Service located at 3913 Le..."
+        },
+        {
+          "number": "HR-9544",
+          "title": "To designate the facility of the United States Postal Service located at 340 Sou..."
+        },
+        {
+          "number": "HR-1318",
+          "title": "Women\u2019s Suffrage National Monument Location Act..."
+        },
+        {
+          "number": "HR-6062",
+          "title": "To restore the ability of the people of American Samoa to approve amendments to ..."
+        },
+        {
+          "number": "HR-5009",
+          "title": "Servicemember Quality of Life Improvement and National Defense Authorization Act..."
+        },
+        {
+          "number": "HR-7872",
+          "title": "Colorado River Salinity Control Fix Act..."
+        },
+        {
+          "number": "HR-5770",
+          "title": "Water Monitoring and Tracking Essential Resources (WATER) Data Improvement Act..."
+        },
+        {
+          "number": "HR-8841",
+          "title": "To designate the facility of the United States Postal Service located at 114 Cen..."
+        },
+        {
+          "number": "HR-4136",
+          "title": "U.S. Congressman Sam Johnson Memorial VA Clinic Act..."
+        },
+        {
+          "number": "HR-6633",
+          "title": "To designate the facility of the United States Postal Service located at 9355 11..."
+        },
+        {
+          "number": "HR-9600",
+          "title": "To designate the facility of the United States Postal Service located at 119 Mai..."
+        },
+        {
+          "number": "HR-3391",
+          "title": "Gabriella Miller Kids First Research Act 2.0..."
+        },
+        {
+          "number": "HR-7385",
+          "title": "To designate the facility of the United States Postal Service located at 29 Fran..."
+        },
+        {
+          "number": "HR-9421",
+          "title": "To designate the facility of the United States Postal Service located at 108 Nor..."
+        },
+        {
+          "number": "HR-5443",
+          "title": "AACE Act..."
+        },
+        {
+          "number": "HR-4984",
+          "title": "D.C. Robert F. Kennedy Memorial Stadium Campus Revitalization Act..."
+        },
+        {
+          "number": "HR-8909",
+          "title": "To designate the facility of the United States Postal Service located at 82-6110..."
+        },
+        {
+          "number": "HR-6852",
+          "title": "Holcombe Rucker Park National Commemorative Site Act..."
+        },
+        {
+          "number": "HR-9549",
+          "title": "To designate the facility of the United States Postal Service located at 125 Sou..."
+        },
+        {
+          "number": "HR-6829",
+          "title": "HEARTS Act of 2024..."
+        },
+        {
+          "number": "HR-6983",
+          "title": "To designate the facility of the United States Postal Service located at 15 Sout..."
+        },
+        {
+          "number": "HR-5301",
+          "title": "Eliminate Useless Reports Act of 2024..."
+        },
+        {
+          "number": "HR-9322",
+          "title": "To designate the facility of the United States Postal Service located at 675 Wol..."
+        },
+        {
+          "number": "HR-2997",
+          "title": "CONVEY Act..."
+        },
+        {
+          "number": "S-4367",
+          "title": "Thomas R. Carper Water Resources Development Act of 2024..."
+        },
+        {
+          "number": "HR-6960",
+          "title": "Emergency Medical Services for Children Reauthorization Act of 2024..."
+        },
+        {
+          "number": "HR-8641",
+          "title": "To designate the facility of the United States Postal Service located at 401 Mai..."
+        },
+        {
+          "number": "HR-6188",
+          "title": "To designate the facility of the United States Postal Service located at 420 Hig..."
+        },
+        {
+          "number": "HR-6826",
+          "title": "To designate the visitor and education center at Fort McHenry National Monument ..."
+        },
+        {
+          "number": "HR-5103",
+          "title": "FISHES Act..."
+        },
+        {
+          "number": "HR-6810",
+          "title": "To designate the facility of the United States Postal Service located at 518 Nor..."
+        },
+        {
+          "number": "HR-9566",
+          "title": "SHARE IT Act..."
+        },
+        {
+          "number": "HR-663",
+          "title": "Native American Child Protection Act..."
+        },
+        {
+          "number": "HR-7893",
+          "title": "To designate the facility of the United States Postal Service located at 306 Pic..."
+        },
+        {
+          "number": "HR-7606",
+          "title": "To designate the facility of the United States Postal Service located at 1087 Ro..."
+        },
+        {
+          "number": "HR-6492",
+          "title": "EXPLORE Act..."
+        },
+        {
+          "number": "HR-7607",
+          "title": "To designate the facility of the United States Postal Service located at Block 1..."
+        },
+        {
+          "number": "HR-7938",
+          "title": "Klamath Basin Water Agreement Support Act of 2024..."
+        },
+        {
+          "number": "HR-10065",
+          "title": "To designate the facility of the United States Postal Service located at 802 Nor..."
+        },
+        {
+          "number": "HR-8663",
+          "title": "DETECT Fentanyl and Xylazine Act of 2024..."
+        },
+        {
+          "number": "HR-1823",
+          "title": "To designate the facility of the United States Postal Service located at 207 Eas..."
+        },
+        {
+          "number": "HR-7332",
+          "title": "Utah State Parks Adjustment Act..."
+        },
+        {
+          "number": "HR-7365",
+          "title": "VETS Safe Travel Act..."
+        },
+        {
+          "number": "S-759",
+          "title": "Beagle Brigade Act of 2023..."
+        },
+        {
+          "number": "HR-9592",
+          "title": "Federal Register Modernization Act of 2024..."
+        },
+        {
+          "number": "HR-8012",
+          "title": "Jackie Robinson Ballpark National Commemorative Site Act..."
+        },
+        {
+          "number": "HR-7180",
+          "title": "To designate the facility of the United States Postal Service located at 80 1st ..."
+        }
+      ]
+    }
+  },
+  "members": {
+    "118": {
+      "congress": 118,
+      "total": 50,
+      "by_party": {
+        "Republican": 22,
+        "Democratic": 26,
+        "Independent": 2
+      },
+      "by_chamber": {
+        "senate": {
+          "Republican": 22,
+          "Democratic": 25,
+          "Independent": 2
+        },
+        "house": {
+          "Democratic": 1
+        }
+      },
+      "by_state": {
+        "Indiana": {
+          "Republican": 1
+        },
+        "Oregon": {
+          "Democratic": 2
+        },
+        "Massachusetts": {
+          "Democratic": 2
+        },
+        "Rhode Island": {
+          "Democratic": 2
+        },
+        "Vermont": {
+          "Democratic": 1,
+          "Independent": 1
+        },
+        "Mississippi": {
+          "Republican": 2
+        },
+        "Georgia": {
+          "Democratic": 2
+        },
+        "Alabama": {
+          "Republican": 1
+        },
+        "North Carolina": {
+          "Republican": 1
+        },
+        "Virginia": {
+          "Democratic": 1
+        },
+        "Maryland": {
+          "Democratic": 1
+        },
+        "Michigan": {
+          "Democratic": 2
+        },
+        "Minnesota": {
+          "Democratic": 2
+        },
+        "Alaska": {
+          "Republican": 2
+        },
+        "South Dakota": {
+          "Republican": 2
+        },
+        "Missouri": {
+          "Republican": 1
+        },
+        "Florida": {
+          "Republican": 1
+        },
+        "South Carolina": {
+          "Republican": 1
+        },
+        "New Hampshire": {
+          "Democratic": 1
+        },
+        "New York": {
+          "Democratic": 1
+        },
+        "California": {
+          "Democratic": 2
+        },
+        "Nevada": {
+          "Democratic": 1
+        },
+        "Hawaii": {
+          "Democratic": 1
+        },
+        "Idaho": {
+          "Republican": 1
+        },
+        "Nebraska": {
+          "Republican": 1
+        },
+        "Kentucky": {
+          "Republican": 2
+        },
+        "Oklahoma": {
+          "Republican": 2
+        },
+        "Connecticut": {
+          "Democratic": 1
+        },
+        "Washington": {
+          "Democratic": 1
+        },
+        "Kansas": {
+          "Republican": 2
+        },
+        "Utah": {
+          "Republican": 1
+        },
+        "Wyoming": {
+          "Republican": 1
+        },
+        "New Mexico": {
+          "Democratic": 1
+        },
+        "New Jersey": {
+          "Democratic": 1
+        },
+        "Maine": {
+          "Independent": 1
+        },
+        "Arizona": {
+          "Democratic": 1
+        }
+      },
+      "updated": "2025-09-22T09:57:22.862985",
+      "swing_states": [
+        "Ohio",
+        "Georgia",
+        "California",
+        "Florida",
+        "Maryland",
+        "Texas",
+        "New Jersey",
+        "Colorado",
+        "Illinois",
+        "Michigan",
+        "Oregon",
+        "North Carolina",
+        "Pennsylvania",
+        "Indiana",
+        "Wisconsin",
+        "Virginia",
+        "Washington",
+        "Kansas",
+        "Vermont",
+        "Nevada",
+        "Minnesota",
+        "Alaska",
+        "Alabama",
+        "New York",
+        "Louisiana",
+        "Mississippi",
+        "Arizona",
+        "Tennessee",
+        "Missouri",
+        "South Carolina",
+        "Maine",
+        "Kentucky"
+      ]
+    }
+  },
+  "lobbyists": {
+    "count": 125
+  },
+  "votes": {},
+  "insights": [
+    "\ud83d\udcca 125 bills tracked across Congress",
+    "\u2705 69 bills became public laws",
+    "\ud83d\udc65 Congress 118: 50 members (Republican: 22, Democratic: 26, Independent: 2)",
+    "\ud83c\udfaf Swing states: Ohio, Georgia, California, Florida, Maryland",
+    "\ud83d\udcbc 125 lobbyists registered",
+    "\u2696\ufe0f Congress 118 is closely divided (D: 52.0%, R: 44.0%)"
+  ]
+}

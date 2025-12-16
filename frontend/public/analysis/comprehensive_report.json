@@ -1,0 +1,149 @@
+{
+  "generated_date": "2025-09-22T09:58:27.817641",
+  "data_location": "data",
+  "analyses": {
+    "party_voting": {
+      "total_votes": 0,
+      "party_unity": {},
+      "bipartisan_bills": [],
+      "partisan_bills": [],
+      "swing_voters": []
+    },
+    "lobbying": {
+      "total_filings": 0,
+      "top_issues": {},
+      "top_registrants": {},
+      "filing_trends": {},
+      "lobbying_summary": {}
+    },
+    "members": {
+      "total_members": 50,
+      "by_party": {
+        "Republican": 22,
+        "Democratic": 26,
+        "Independent": 2
+      },
+      "by_state": {
+        "Indiana": {
+          "Republican": 1
+        },
+        "Oregon": {
+          "Democratic": 2
+        },
+        "Massachusetts": {
+          "Democratic": 2
+        },
+        "Rhode Island": {
+          "Democratic": 2
+        },
+        "Vermont": {
+          "Democratic": 1,
+          "Independent": 1
+        },
+        "Mississippi": {
+          "Republican": 2
+        },
+        "Georgia": {
+          "Democratic": 2
+        },
+        "Alabama": {
+          "Republican": 1
+        },
+        "North Carolina": {
+          "Republican": 1
+        },
+        "Virginia": {
+          "Democratic": 1
+        },
+        "Maryland": {
+          "Democratic": 1
+        },
+        "Michigan": {
+          "Democratic": 2
+        },
+        "Minnesota": {
+          "Democratic": 2
+        },
+        "Alaska": {
+          "Republican": 2
+        },
+        "South Dakota": {
+          "Republican": 2
+        },
+        "Missouri": {
+          "Republican": 1
+        },
+        "Florida": {
+          "Republican": 1
+        },
+        "South Carolina": {
+          "Republican": 1
+        },
+        "New Hampshire": {
+          "Democratic": 1
+        },
+        "New York": {
+          "Democratic": 1
+        },
+        "California": {
+          "Democratic": 2
+        },
+        "Nevada": {
+          "Democratic": 1
+        },
+        "Hawaii": {
+          "Democratic": 1
+        },
+        "Idaho": {
+          "Republican": 1
+        },
+        "Nebraska": {
+          "Republican": 1
+        },
+        "Kentucky": {
+          "Republican": 2
+        },
+        "Oklahoma": {
+          "Republican": 2
+        },
+        "Connecticut": {
+          "Democratic": 1
+        },
+        "Washington": {
+          "Democratic": 1
+        },
+        "Kansas": {
+          "Republican": 2
+        },
+        "Utah": {
+          "Republican": 1
+        },
+        "Wyoming": {
+          "Republican": 1
+        },
+        "New Mexico": {
+          "Democratic": 1
+        },
+        "New Jersey": {
+          "Democratic": 1
+        },
+        "Maine": {
+          "Independent": 1
+        },
+        "Arizona": {
+          "Democratic": 1
+        }
+      },
+      "by_chamber": {
+        "senate": {
+          "Republican": 22,
+          "Democratic": 25,
+          "Independent": 2
+        },
+        "house": {
+          "Democratic": 1
+        }
+      }
+    }
+  }
+}

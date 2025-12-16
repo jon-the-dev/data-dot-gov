@@ -1,0 +1,181 @@
+site_name: Congressional Transparency Platform
+site_description: Comprehensive data collection and analysis platform for U.S. government transparency
+site_author: Congressional Transparency Project
+site_url: https://your-domain.com
+
+repo_name: senate-gov
+repo_url: https://github.com/yourusername/senate-gov
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.prune
+    - navigation.indexes
+    - navigation.top
+    - toc.follow
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+    - search.share
+    - header.autohide
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+  icon:
+    logo: material/bank
+    repo: fontawesome/brands/github
+
+plugins:
+  - search:
+      separator: '[\s\-\.]+'
+  - minify:
+      minify_html: true
+      minify_js: true
+      minify_css: true
+      htmlmin_opts:
+        remove_comments: true
+  - git-revision-date-localized:
+      enable_creation_date: true
+      type: timeago
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      repo_url_shorthand: true
+      user: yourusername
+      repo: senate-gov
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+  - tables
+
+nav:
+  - Home: index.md
+
+  - Getting Started:
+    - getting-started/quick-start.md
+
+  - Development:
+    - development/code-quality.md
+    - development/linting-setup.md
+    - development/cleanup-strategy.md
+    - development/test-strategies.md
+
+  - Architecture:
+    - architecture/database.md
+    - architecture/pydantic-models.md
+    - architecture/core-package.md
+    - architecture/consolidated-modules.md
+
+  - Features:
+    - features/committee-frontend.md
+    - features/historical-data.md
+    - features/member-consistency.md
+    - features/voting-analysis.md
+
+  - API Documentation:
+    - api/data-needs.md
+    - api/congress-v1.md
+    - api/senate-v1.md
+
+  - Deployment:
+    - deployment/deployment.md
+
+  - Planning:
+    - planning/phase-2.md
+    - planning/phase-3.md
+
+  - Reports:
+    - reports/consolidation.md
+    - reports/consolidated-modules-test.md
+    - reports/react-viewer-validation.md
+
+  - Reference:
+    - reference/claude-ai.md
+    - reference/terms-of-service.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/yourusername/senate-gov
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/yourusername
+
+  analytics:
+    provider: google
+    property: G-XXXXXXXXXX
+
+  consent:
+    title: Cookie consent
+    description: >-
+      We use cookies to recognize your repeated visits and preferences, as well
+      as to measure the effectiveness of our documentation and whether users
+      find what they're searching for. With your consent, you're helping us to
+      make our documentation better.
+
+copyright: >
+  Copyright &copy; 2024 Congressional Transparency Platform –
+  <a href="#__consent">Change cookie settings</a>
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/extra.js

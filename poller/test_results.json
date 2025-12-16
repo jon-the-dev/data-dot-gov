@@ -1,0 +1,266 @@
+{
+  "summary": {
+    "total_tests": 41,
+    "passed": 38,
+    "failed": 3,
+    "success_rate": "92.7%"
+  },
+  "results": {
+    "import_core.api.rate_limiter": {
+      "passed": true,
+      "message": "Successfully imported RateLimiter",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:22.833370"
+    },
+    "import_core.api.base": {
+      "passed": true,
+      "message": "Successfully imported BaseAPI",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:22.833383"
+    },
+    "import_core.api.congress": {
+      "passed": true,
+      "message": "Successfully imported CongressGovAPI",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:22.833386"
+    },
+    "import_core.api.senate": {
+      "passed": true,
+      "message": "Successfully imported SenateGovAPI",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:22.833388"
+    },
+    "import_core.models.base": {
+      "passed": true,
+      "message": "Successfully imported BaseRecord",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:22.917647"
+    },
+    "import_core.models.enums": {
+      "passed": true,
+      "message": "Successfully imported Party",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:22.917658"
+    },
+    "import_core.models.member": {
+      "passed": true,
+      "message": "Successfully imported Member",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:22.917665"
+    },
+    "import_core.models.bill": {
+      "passed": true,
+      "message": "Successfully imported Bill",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:22.917667"
+    },
+    "import_core.models.vote": {
+      "passed": true,
+      "message": "Successfully imported Vote",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:22.917669"
+    },
+    "import_core.models.lobbying": {
+      "passed": true,
+      "message": "Successfully imported LobbyingFiling",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:22.917671"
+    },
+    "import_core.storage.file_storage": {
+      "passed": true,
+      "message": "Successfully imported FileStorage",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:22.917674"
+    },
+    "import_core.storage.compressed": {
+      "passed": true,
+      "message": "Successfully imported CompressedStorage",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:22.917676"
+    },
+    "import_core.storage.database": {
+      "passed": true,
+      "message": "Successfully imported DatabaseStorage",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:22.917678"
+    },
+    "import_fetchers.unified_fetcher": {
+      "passed": true,
+      "message": "Successfully imported UnifiedFetcher",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:22.930768"
+    },
+    "import_fetchers.specialized_fetcher": {
+      "passed": true,
+      "message": "Successfully imported SpecializedFetcher",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:22.930778"
+    },
+    "import_analyzers.party_analytics": {
+      "passed": true,
+      "message": "Successfully imported PartyAnalyzer",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:22.939501"
+    },
+    "import_analyzers.geographic_analytics": {
+      "passed": true,
+      "message": "Successfully imported GeographicAnalyzer",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:22.939508"
+    },
+    "import_analyzers.temporal_analytics": {
+      "passed": true,
+      "message": "Successfully imported TemporalAnalyzer",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:22.939510"
+    },
+    "import_analyzers.topic_analytics": {
+      "passed": true,
+      "message": "Successfully imported TopicAnalyzer",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:22.939512"
+    },
+    "import_analyzers.orchestrator": {
+      "passed": true,
+      "message": "Successfully imported AnalysisOrchestrator",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:22.939514"
+    },
+    "rate_limiter_basic": {
+      "passed": true,
+      "message": "Basic rate limiting test completed in 0.000s",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:22.939535"
+    },
+    "rate_limiter_delay": {
+      "passed": true,
+      "message": "Rate limiting delay test: 2.003s delay",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:24.942361"
+    },
+    "rate_limiter_threading": {
+      "passed": true,
+      "message": "Thread safety test: 9 requests completed",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:26.948005"
+    },
+    "model_member_creation": {
+      "passed": true,
+      "message": "Member model created successfully: John Doe",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:26.950808"
+    },
+    "model_member_serialization": {
+      "passed": true,
+      "message": "Member model serialization/deserialization successful",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:26.951504"
+    },
+    "model_bill_creation": {
+      "passed": false,
+      "message": "Bill model created successfully: None",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:26.951625"
+    },
+    "model_vote_creation": {
+      "passed": true,
+      "message": "Vote model created successfully: 118_house_1_100",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:26.951765"
+    },
+    "storage_tests": {
+      "passed": false,
+      "message": "Storage module tests failed: 'dict' object has no attribute 'replace'",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:26.952738"
+    },
+    "api_congress_init": {
+      "passed": true,
+      "message": "CongressGovAPI initialization successful",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:26.953081"
+    },
+    "api_congress_attributes": {
+      "passed": true,
+      "message": "CongressGovAPI has required attributes: api_key=True, base_url=True",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:26.953097"
+    },
+    "api_senate_init": {
+      "passed": true,
+      "message": "SenateGovAPI initialization successful",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:27.301864"
+    },
+    "fetcher_unified_init": {
+      "passed": true,
+      "message": "UnifiedFetcher initialization successful",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:27.443477"
+    },
+    "fetcher_specialized_init": {
+      "passed": true,
+      "message": "SpecializedFetcher initialization successful",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:27.443737"
+    },
+    "analyzer_party": {
+      "passed": true,
+      "message": "PartyAnalyzer initialized with required attributes: storage=True, members=True, method=True",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:27.444014"
+    },
+    "analyzer_geographic": {
+      "passed": true,
+      "message": "GeographicAnalyzer initialized with required attributes: storage=True, members=True, method=True",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:27.444679"
+    },
+    "analyzer_temporal": {
+      "passed": true,
+      "message": "TemporalAnalyzer initialized with required attributes: storage=True, data=True, method=True",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:27.444819"
+    },
+    "analyzer_tests": {
+      "passed": false,
+      "message": "Analyzer module tests failed: 'TopicAnalyzer' object has no attribute 'categorize_bills'",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:27.444954"
+    },
+    "compatibility_gov_data_analyzer": {
+      "passed": true,
+      "message": "API connections script imports successfully",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:27.455887"
+    },
+    "compatibility_categorize_bills": {
+      "passed": true,
+      "message": "Bill categorization script imports successfully",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:27.464741"
+    },
+    "compatibility_analyze_bill_sponsors": {
+      "passed": true,
+      "message": "Sponsor analysis script imports successfully",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:27.465531"
+    },
+    "migration_verification": {
+      "passed": true,
+      "message": "Migration verification passed: \n=== Migration Validation Summary ===\nOverall Status: \u2705 SUCCESS\nTotal Errors: 0\nCore Imports: 5/5 successful\nFile Imports: 6/6 successful\nFunctionality Tests: 3/3 successful\n\n=== Recommendations ===\n\u2705...",
+      "details": null,
+      "timestamp": "2025-09-23T07:57:28.471057"
+    }
+  },
+  "errors": [
+    "model_bill_creation: Bill model created successfully: None",
+    "storage_tests: Storage module tests failed: 'dict' object has no attribute 'replace'",
+    "analyzer_tests: Analyzer module tests failed: 'TopicAnalyzer' object has no attribute 'categorize_bills'"
+  ],
+  "warnings": [
+    "Deprecation warning: This script is deprecated. Use core package APIs directly or use comprehensive_analyzer.py",
+    "Deprecation warning: gov_data_downloader_v2.py is deprecated. Use core package APIs directly or use comprehensive_analyzer.py"
+  ],
+  "timestamp": "2025-09-23T07:57:28.471178"
+}

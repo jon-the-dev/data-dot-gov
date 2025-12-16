@@ -1,0 +1,124 @@
+# Docker Compose override for development environment
+# This file automatically extends docker-compose.yml for local development
+
+
+services:
+  # Development overrides for backend - expose API for local dev
+  backend:
+    ports:
+      - "8000:8000"  # Expose backend API for development
+
+  # Development overrides for PostgreSQL
+  postgres:
+    ports:
+      - "5432:5432"  # Expose database port for development tools
+    environment:
+      POSTGRES_PASSWORD: dev_password  # Less secure password for development
+    volumes:
+      # Use local development data directory
+      - ./docker-volumes/postgres-dev:/var/lib/postgresql/data
+    command: >
+      postgres
+      -c log_statement=all
+      -c log_min_duration_statement=0
+      -c log_line_prefix='%t [%p]: [%l-1] user=%u,db=%d '
+
+  # Development overrides for Redis
+  redis:
+    ports:
+      - "6379:6379"  # Expose Redis port for development tools
+    volumes:
+      - ./docker-volumes/redis-dev:/data
+    command: >
+      redis-server
+      --appendonly yes
+      --appendfsync everysec
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+      --save 60 10
+
+  # Development overrides for pgAdmin
+  pgadmin:
+    profiles:
+      - development  # Only start in development profile
+    environment:
+      PGADMIN_DEFAULT_PASSWORD: dev_admin  # Less secure for development
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+
+  # Development frontend service
+  frontend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+      target: development
+    container_name: congress_frontend_dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules  # Anonymous volume for node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=http://localhost:8000
+      - VITE_APP_TITLE=Congressional Transparency Platform (Dev)
+      - VITE_ENABLE_ANALYTICS=false
+    networks:
+      - congress_network
+    profiles:
+      - development
+    command: pnpm run dev --host 0.0.0.0
+
+  # Development backend service
+  backend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+      target: development
+    container_name: congress_backend_dev
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - /app/__pycache__  # Anonymous volume for Python cache
+    environment:
+      - ENVIRONMENT=development
+      - DEBUG=true
+      - LOG_LEVEL=debug
+      - DATABASE_URL=postgresql://congress_app:dev_password@postgres:5432/congress_transparency
+      - REDIS_URL=redis://redis:6379/0
+      - CORS_ORIGINS=http://localhost:5173,http://localhost:3000
+      - MAX_WORKERS=2
+    networks:
+      - congress_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    profiles:
+      - development
+    command: uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  # Development-specific volumes using local bind mounts
+  postgres_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/docker-volumes/postgres-dev
+
+  redis_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/docker-volumes/redis-dev
+
+  pgadmin_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/docker-volumes/pgadmin-dev

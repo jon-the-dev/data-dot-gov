@@ -1,0 +1,15 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "Congressional Transparency DB",
+      "Group": "Development",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "congress_transparency",
+      "Username": "congress_app",
+      "SSLMode": "prefer",
+      "PassFile": "/tmp/pgpass",
+      "Comment": "Congressional Transparency Platform Database - Development Environment"
+    }
+  }
+}
