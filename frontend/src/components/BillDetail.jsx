@@ -27,10 +27,7 @@ function BillDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    loadBillData();
-  }, [billId, loadBillData]);
-
+  // Define loadBillData BEFORE useEffect to avoid TDZ (Temporal Dead Zone) error
   const loadBillData = useCallback(async () => {
     try {
       setLoading(true);
@@ -76,6 +73,10 @@ function BillDetail() {
       setLoading(false);
     }
   }, [billId]);
+
+  useEffect(() => {
+    loadBillData();
+  }, [billId, loadBillData]);
 
   const getStatusColor = status => {
     if (!status) return 'bg-gray-100 text-gray-700';
