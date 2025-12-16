@@ -129,7 +129,9 @@ function BillDetail() {
     );
   }
 
-  const billNumber = bill.type ? `${bill.type} ${bill.bill_id}` : bill.bill_id;
+  // Handle both 'number' (from API) and 'bill_id' (from index) field names
+  const billNum = bill.number || bill.bill_id;
+  const billNumber = bill.type ? `${bill.type} ${billNum}` : billNum;
   const statusText = bill.latestAction?.text || 'Status unknown';
   const statusColor = getStatusColor(statusText);
 
