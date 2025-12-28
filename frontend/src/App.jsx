@@ -104,7 +104,7 @@ function AppContent() {
 
   useEffect(() => {
     // Only load initial data for routes that need it
-    const needsGlobalData = ['/', '/party-comparison', '/bills'].includes(location.pathname);
+    const needsGlobalData = ['/', '/party-comparison', '/bills', '/members'].includes(location.pathname);
     if (needsGlobalData && !data.membersSummary) {
       loadInitialData();
     }
