@@ -288,9 +288,6 @@ networks:
   congress_prod_network:
     driver: bridge
     name: congress_prod_network
-    ipam:
-      config:
-        - subnet: 172.25.0.0/16
     driver_opts:
       com.docker.network.bridge.enable_icc: "true"
       com.docker.network.bridge.enable_ip_masquerade: "true"
