@@ -89,20 +89,27 @@ class CommitteeService:
         }
 
     @cache_response(ttl=LONG_TTL, use_file=True)
-    async def get_committee_details(self, committee_id: str, congress: int = 118, use_api: bool = True) -> Optional[Dict[str, Any]]:
+    async def get_committee_details(self, committee_id: str, congress: int = 118, use_api: bool = False) -> Optional[Dict[str, Any]]:
         """
         Get details for a specific committee.
 
         Args:
             committee_id: Committee system code (supports various formats: 'ssju00', 'SSJU', etc.)
             congress: Congress number
-            use_api: Whether to fetch fresh data from Congress.gov API
+            use_api: Whether to fetch fresh data from Congress.gov API (default: False for performance)
 
         Returns:
             Committee details dictionary or None if not found
         """
-        # Try to get from Congress.gov API first if requested
-        if use_api:
+        # Try local files first for better performance
+        local_data = await self._get_committee_details_from_files(committee_id, congress)
+
+        # If local data exists and API not explicitly requested, return local data
+        if local_data and not use_api:
+            return local_data
+
+        # Try to get from Congress.gov API if explicitly requested or local data not found
+        if use_api or not local_data:
             try:
                 async with self.congress_api:
                     committee = await self.congress_api.get_committee_details(committee_id, congress)
@@ -119,10 +126,14 @@ class CommitteeService:
 
                         return committee_dict
             except CongressAPIError as e:
-                logger.warning(f"API error fetching committee {committee_id}: {e}. Falling back to local data.")
+                logger.warning(f"API error fetching committee {committee_id}: {e}. Using local data if available.")
+            except asyncio.TimeoutError as e:
+                logger.warning(f"API timeout fetching committee {committee_id}: {e}. Using local data if available.")
+            except Exception as e:
+                logger.warning(f"Unexpected error fetching committee {committee_id} from API: {e}. Using local data if available.")
 
-        # Fallback to local file data
-        return await self._get_committee_details_from_files(committee_id, congress)
+        # Return local data if available (either from initial check or as fallback)
+        return local_data
 
     async def get_committee_subcommittees(self, committee_id: str, congress: int = 118) -> List[Dict[str, Any]]:
         """Get subcommittees for a specific committee"""
@@ -188,19 +199,19 @@ class CommitteeService:
         return subcommittees
 
     @cache_response(ttl=DEFAULT_TTL, use_file=True)
-    async def get_committee_members(self, committee_id: str, congress: int = 118, use_api: bool = True) -> Dict[str, Any]:
+    async def get_committee_members(self, committee_id: str, congress: int = 118, use_api: bool = False) -> Dict[str, Any]:
         """
         Get members of a specific committee.
 
         Args:
             committee_id: Committee system code
             congress: Congress number
-            use_api: Whether to fetch actual membership from Congress.gov API
+            use_api: Whether to fetch actual membership from Congress.gov API (default: False for performance)
 
         Returns:
             Dictionary with committee members and metadata
         """
-        # Try to get actual members from Congress.gov API first
+        # Try to get actual members from Congress.gov API only if explicitly requested
         if use_api:
             try:
                 async with self.congress_api:
@@ -225,10 +236,10 @@ class CommitteeService:
                             "committee_name": committee_name,
                             "note": "Actual committee membership from Congress.gov API"
                         }
-            except CongressAPIError as e:
-                logger.warning(f"API error fetching members for {committee_id}: {e}. Falling back to bill analysis.")
+            except (CongressAPIError, asyncio.TimeoutError, Exception) as e:
+                logger.warning(f"Error fetching members for {committee_id} from API: {e}. Falling back to bill analysis.")
 
-        # Fallback to bill sponsorship analysis if API fails or not requested
+        # Use bill sponsorship analysis by default or as fallback
         return await self._get_committee_members_from_bills(committee_id, congress)
 
     async def get_committee_bills(self, committee_id: str, congress: int = 118) -> Dict[str, Any]:
@@ -486,31 +497,29 @@ class CommitteeService:
 
         return None
 
-    async def committee_exists(self, committee_id: str, congress: int = 118, use_api: bool = True) -> bool:
+    async def committee_exists(self, committee_id: str, congress: int = 118, use_api: bool = False) -> bool:
         """Check if a committee exists using multiple code variations"""
-        # Try API first if requested
+        # Check local files first for better performance
+        committees_dir = self.committees_dir / str(congress)
+        if committees_dir.exists():
+            # Try different code variations
+            code_variations = get_committee_code_variations(committee_id)
+
+            for code in code_variations:
+                for chamber_dir in committees_dir.iterdir():
+                    if chamber_dir.is_dir():
+                        committee_file = chamber_dir / f"{code}.json"
+                        if committee_file.exists():
+                            return True
+
+        # Try API only if explicitly requested and not found locally
         if use_api:
             try:
                 async with self.congress_api:
                     committee = await self.congress_api.get_committee_details(committee_id, congress)
                     return committee is not None
-            except CongressAPIError:
-                pass  # Fall through to file check
-
-        # Check local files
-        committees_dir = self.committees_dir / str(congress)
-        if not committees_dir.exists():
-            return False
-
-        # Try different code variations
-        code_variations = get_committee_code_variations(committee_id)
-
-        for code in code_variations:
-            for chamber_dir in committees_dir.iterdir():
-                if chamber_dir.is_dir():
-                    committee_file = chamber_dir / f"{code}.json"
-                    if committee_file.exists():
-                        return True
+            except (CongressAPIError, asyncio.TimeoutError, Exception):
+                pass  # Fall through to return False
 
         return False
 
