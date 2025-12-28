@@ -24,6 +24,9 @@ cd frontend && pnpm install
 # Copy and configure environment variables
 cp .env.example .env
 # Add DATA_GOV_API_KEY from https://api.data.gov/signup/
+
+# Frontend environment files (.env, .env.development, .env.production)
+# are already configured - see docs/deployment/api-configuration.md
 ```
 
 ### Testing & Validation
