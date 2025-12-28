@@ -13,6 +13,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 
 import OptimizedDataService from '../services/optimizedDataService';
+import DataService from '../services/dataService';
 
 import BillProgressBar from './BillProgressBar';
 import CommitteeTimeline from './CommitteeTimeline';
